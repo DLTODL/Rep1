@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htm@3.1.0/dist/htm.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
         .site-header, .entry-title {display:none!important}
@@ -16,7 +17,7 @@
         /* Root level style reset */
         #root {
             all: revert !important;
-            font-family: 'Arial', sans-serif !important;
+            font-family: 'Inter', sans-serif !important;
             color: #000000 !important;
             background: #ffffff !important;
             isolation: isolate !important;
@@ -24,9 +25,9 @@
         }        
 
         /* Container isolation */
-        .offerte-tool-container { 
+        .offerte-tool-container {
             all: initial !important;
-            font-family: 'Arial', sans-serif !important;
+            font-family: 'Inter', sans-serif !important;
             box-sizing: border-box !important;
             color: #000000 !important;
             background: #ffffff !important;
@@ -1918,8 +1919,18 @@
                 };
 
                 return html`
-                    <div className="flex h-screen overflow-hidden">
-                        <div className=${ `bg-white shadow-lg transition-all duration-300 ${sidebarOpen ? 'w-80' : 'w-16'} flex-shrink-0 animate-slide-in` }>
+                    <div className="offerte-tool-container flex flex-col h-screen">
+                        <header className="bg-gradient-to-r from-[#008c95] to-[#006b74] text-white p-4 shadow flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <button onClick=${toggleSidebar} className="md:hidden focus:outline-none">
+                                    ${sidebarOpen ? '✖' : '☰'}
+                                </button>
+                                <h1 className="text-xl font-semibold">Offerte Tool</h1>
+                            </div>
+                            <span className="text-sm italic">Calculator</span>
+                        </header>
+                        <div className="flex flex-1 overflow-hidden">
+                            <div className=${ `bg-white shadow-lg transition-all duration-300 ${sidebarOpen ? 'w-80' : 'w-16'} flex-shrink-0 animate-slide-in` }>
                             <div className="p-4">
                                 <button onClick=${toggleSidebar} className="text-[#008c95] hover:text-[#f2c75c] mb-4">
                                     ${sidebarOpen ? '<< Sluiten' : '>> Openen'}
