@@ -1,0 +1,2377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">    
+   
+    <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htm@3.1.0/dist/htm.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .site-header, .entry-title {display:none!important}
+        div[data-elementor-type="footer"][data-elementor-id="181"] { display: none !important; }
+        /* Root level style reset */
+        #root {
+            all: revert !important;
+            font-family: 'Arial', sans-serif !important;
+            color: #000000 !important;
+            background: #ffffff !important;
+            isolation: isolate !important;
+            contain: content !important;
+        }        
+
+        /* Container isolation */
+        .offerte-tool-container { 
+            all: initial !important;
+            font-family: 'Arial', sans-serif !important;
+            box-sizing: border-box !important;
+            color: #000000 !important;
+            background: #ffffff !important;
+            isolation: isolate !important;
+            contain: content !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+      
+        /* Force inheritance reset */
+        .offerte-tool-container * { 
+            all: revert !important;
+            box-sizing: border-box !important;
+            font-family: inherit !important;
+            color: inherit !important;
+        }
+        
+        /* Animation protection */
+        .animate-slide-in { 
+            animation: slideIn 0.3s ease-out !important; 
+        }
+        @keyframes slideIn { 
+            from { transform: translateX(-100%); opacity: 0; } 
+            to { transform: translateX(0); opacity: 1; } 
+        }
+        .animate-fade-in { 
+            animation: fadeIn 0.3s ease-out !important; 
+        }
+        @keyframes fadeIn { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
+
+        /* Table protection */
+        .offerte-tool-container table {
+            width: 100% !important;
+            table-layout: fixed !important;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            background: #ffffff !important;
+            position: relative !important;
+            z-index: 2 !important;
+        }
+
+        .offerte-tool-container th,
+        .offerte-tool-container td {
+            padding: 0.5rem !important;
+            border: none !important;
+            background: none !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            color: #000000 !important;
+        }
+
+        .offerte-tool-container thead th {
+            background-color: #008c95 !important;
+            color: #f2c75c !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 10 !important;
+            font-weight: bold !important;
+        }
+
+        /* Hover state protection */
+        .offerte-tool-container tr:hover {
+            background-color: #f2c75c !important;
+            color: #000000 !important;
+        }
+
+        .offerte-tool-container tr:hover td {
+            background-color: #f2c75c !important;
+            color: #000000 !important;
+        }
+
+        .offerte-tool-container button:hover {
+            background-color: #f2c75c !important;
+            color: #000000 !important;
+        }
+
+        /* Table container protection */
+        .table-container {
+            overflow-x: auto !important;
+            max-width: 100% !important;
+            background-color: #ffffff !important;
+            position: relative !important;
+            z-index: 2 !important;
+        }
+
+        .table-container > div {
+            overflow-y: auto !important;
+            max-height: calc(100vh - 200px) !important;
+        }
+
+        /* Truncation protection */
+        .truncate { 
+            overflow: hidden !important; 
+            text-overflow: ellipsis !important; 
+            white-space: nowrap !important; 
+        }
+
+        /* Category items protection */
+        .category-item { 
+            cursor: pointer !important;
+            background-color: #f2c75c !important;
+            color: #000000 !important;
+            position: relative !important;
+            z-index: 3 !important;
+        }
+
+        .category-item:hover { 
+            background-color: #f2c75c !important;
+            color: #000000 !important;
+        }
+
+        /* Button protection */
+        .offerte-tool-container button {
+            cursor: pointer !important;
+            border: none !important;
+            outline: none !important;
+            font-family: inherit !important;
+            background: none !important;
+            position: relative !important;
+            z-index: 3 !important;
+        }
+
+        /* Input protection */
+        .offerte-tool-container input,
+        .offerte-tool-container textarea {
+            font-family: inherit !important;
+            padding: 0.5rem !important;
+            border-radius: 0.25rem !important;
+            background: #ffffff !important;
+            color: #000000 !important;
+            position: relative !important;
+            z-index: 3 !important;
+        }
+
+        .offerte-tool-container input:focus,
+        .offerte-tool-container textarea:focus {
+            outline: none !important;
+            border-color: #f2c75c !important;
+            box-shadow: 0 0 0 2px rgba(242, 199, 92, 0.2) !important;
+        }
+
+        /* Tooltip protection */
+        .tooltip { 
+            position: fixed !important; 
+            background: #ffffff !important; 
+            border: 1px solid #008c95 !important; 
+            padding: 4px 8px !important; 
+            border-radius: 4px !important; 
+            z-index: 9999 !important; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important; 
+            max-width: 300px !important; 
+            white-space: pre-wrap !important; 
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+            font-size: 0.875rem !important;
+            line-height: 1.25rem !important;
+            color: #000000 !important;
+            pointer-events: none !important;
+        }
+
+        .category-tooltip { 
+            background: #ffffff !important; 
+            border: 1px solid #008c95 !important; 
+            padding: 8px !important; 
+            border-radius: 4px !important; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+            max-width: 300px !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+            font-size: 0.875rem !important;
+            line-height: 1.25rem !important;
+            color: #000000 !important;
+            position: fixed !important;
+            z-index: 9999 !important;
+            pointer-events: none !important;
+        }
+
+        [type=button], [type=submit], button {
+            color: #f2c75c;
+            border: 1px solid #f2c75c;
+        }
+        [type=button]:active, [type=submit]:active, button:active {
+            color: #f2c75c;
+            border: 1px solid #f2c75c;
+        }
+        [type=button]:first-child, [type=submit]:first-child, button:first-child {
+            color: #f2c75c;
+            border: 1px solid #f2c75c;
+        }
+
+        [type=button]:focus, [type=button]:hover, [type=submit]:focus, [type=submit]:hover, button:focus, button:hover {
+            color: #ffffff;
+            background-color: #f2c75c;
+            text-decoration: none;
+        }
+
+        .simplified-view .col-code,
+        .simplified-view .col-btw,
+        .simplified-view .col-categorie {
+            display: none !important;
+        }
+
+        .table-container.simplified-view table td:nth-child(1),
+        .table-container.simplified-view table td:nth-child(2),
+        .table-container.simplified-view table td:nth-child(7) {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+    <script type="text/javascript">
+                     const EMBEDDED_JSON = {
+  "Egaliseren & Primer": {
+    "Egaliseren incl. materiaal (max 3 mm verschil)": {
+      "item_code": "VE560",
+      "purchase_price": 4.93,
+      "base_price": 12.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Egaline Uzin NC560 per zak": {
+      "item_code": "VEZ560",
+      "purchase_price": 21.42,
+      "base_price": 31.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Egaline Uzin NC560 per zak (partner)": {
+      "item_code": "PVEZ560",
+      "purchase_price": 21.42,
+      "base_price": 29.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Egaliseren incl. materiaal (max 3 mm verschil) met Bi-turbo sneldrogende egaline": {
+      "item_code": "VE172",
+      "purchase_price": 9.02,
+      "base_price": 16.50,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Egaline Uzin NC172 per zak": {
+      "item_code": "VEZ172",
+      "purchase_price": 39.20,
+      "base_price": 42.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Egaliseren incl. materiaal (max 3 mm verschil) met vezelversterkte gipsegalisatie": {
+      "item_code": "VE115",
+      "purchase_price": 6.26,
+      "base_price": 13.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Egaline Uzin NC115 per zak": {
+      "item_code": "VEZ115",
+      "purchase_price": 27.21,
+      "base_price": 32.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Stelpost repareren ondervloer tbv egaliseren met reparatiemortel cementdekvloer per zak": {
+      "item_code": "RM182",
+      "purchase_price": 25.67,
+      "base_price": 34.50,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Stelpost repareren gips ondervloer tbv egaliseren met reparatiemortel per zak": {
+      "item_code": "RM118",
+      "purchase_price": 21.79,
+      "base_price": 34.50,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Plaatsen tweecomponenten vochtscherm geschikt voor vloerverwarming": {
+      "item_code": "00105",
+      "purchase_price": 0.00,
+      "base_price": 1410.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Primer PE260 incl. aanbrengen op cementdekvloer per m2": {
+      "item_code": "PE260",
+      "purchase_price": 1.30,
+      "base_price": 2.20,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Primer PE260 incl. aanbrengen op cementdekvloer per can á 10kg": {
+      "item_code": "PEC260",
+      "purchase_price": 76.70,
+      "base_price": 91.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Primer PE360 incl. aanbrengen op cementdekvloer per m2": {
+      "item_code": "PE360",
+      "purchase_price": 1.30,
+      "base_price": 2.20,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Primer PE360 incl. aanbrengen op cementdekvloer per can á 10kg": {
+      "item_code": "PEC360",
+      "purchase_price": 62.43,
+      "base_price": 91.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Dichtsmeren gleuven vloerverwarming met krimparme mortel incl. materiaal en arbeid per zak": {
+      "item_code": "VV-Z181/182",
+      "purchase_price": 25.67,
+      "base_price": 35.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Dichtsmeren gleuven vloerverwarming met krimparme mortel incl. materiaal en arbeid per m2": {
+      "item_code": "VV-181/182",
+      "purchase_price": 2.75,
+      "base_price": 13.00,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Vloerverwarming": {
+    "Infrezen vloerverwarming zandcement": {
+      "item_code": "118",
+      "purchase_price": 32.00,
+      "base_price": 37.50,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Infrezen vloerverwarming tegelvloer": {
+      "item_code": "00119",
+      "purchase_price": 0.00,
+      "base_price": 52.50,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "PVC Plaatsing": {
+    "Plaatsen PVC vloer in rechte strook": {
+      "item_code": "VRECHT",
+      "purchase_price": 0.00,
+      "base_price": 13.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Plaatsen PVC vloer in visgraatmotief": {
+      "item_code": "VVIS",
+      "purchase_price": 0.00,
+      "base_price": 18.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Plaatsen PVC vloer in tegelmotief XL (vanaf 90 cm)": {
+      "item_code": "VTva90",
+      "purchase_price": 0.00,
+      "base_price": 18.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Plaatsen PVC vloer in tegelmotief XL (tot 90 cm)": {
+      "item_code": "VTtot90",
+      "purchase_price": 0.00,
+      "base_price": 14.00,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "PVC Materialen": {
+    "Inmeten aantal meters op locatie": {
+      "item_code": "00123",
+      "purchase_price": 0.00,
+      "base_price": 45.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Leveren Jumpax Classic per pak á 2.88m2": {
+      "item_code": "00124",
+      "purchase_price": 48.80,
+      "base_price": 72.80,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren Jumpax Classic per m2": {
+      "item_code": "00124",
+      "purchase_price": 16.95,
+      "base_price": 25.28,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Plaatsen Jumpax Classic per m2": {
+      "item_code": "1234",
+      "purchase_price": 5.00,
+      "base_price": 5.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en plaatsen Jumpax Classic per m2": {
+      "item_code": "4321",
+      "purchase_price": 21.95,
+      "base_price": 26.90,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren Jumpax Basic per pak á 2.88m2": {
+      "item_code": "00124",
+      "purchase_price": 46.05,
+      "base_price": 60.20,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren Jumpax Basic per m2": {
+      "item_code": "00124",
+      "purchase_price": 15.99,
+      "base_price": 20.90,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Plaatsen Jumpax Basic per m2": {
+      "item_code": "1234",
+      "purchase_price": 5.00,
+      "base_price": 5.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en plaatsen Jumpax Basic per m2": {
+      "item_code": "4321",
+      "purchase_price": 21.99,
+      "base_price": 25.90,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Jumpax Heatfoil": {
+      "item_code": "",
+      "purchase_price": 64.50,
+      "base_price": 74.50,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Jumpax Heatfoil per m2": {
+      "item_code": "",
+      "purchase_price": 4.30,
+      "base_price": 5.30,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Jumpax Heatfoil plaatsen": {
+      "item_code": "",
+      "purchase_price": 0.00,
+      "base_price": 1.50,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Anhydriet vloer extra kosten per m2": {
+      "item_code": "",
+      "purchase_price": 0.00,
+      "base_price": 1.20,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "PE folie plaatsen": {
+      "item_code": "",
+      "purchase_price": 0.00,
+      "base_price": 1.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "PE folie per 1m2": {
+      "item_code": "",
+      "purchase_price": 0.29,
+      "base_price": 0.85,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "PE folie per rol t.w.v. 100m2 (50x2m)": {
+      "item_code": "",
+      "purchase_price": 28.92,
+      "base_price": 38.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren bies (zwart)": {
+      "item_code": "00125",
+      "purchase_price": 1.98,
+      "base_price": 3.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren bies (messing)": {
+      "item_code": "00125",
+      "purchase_price": 32.00,
+      "base_price": 39.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "PVC lijm S2000 per emmer": {
+      "item_code": "131",
+      "purchase_price": 83.96,
+      "base_price": 105.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "PVC lijm S2000 incl. aanbrengen": {
+      "item_code": "0013",
+      "purchase_price": 1.86,
+      "base_price": 2.88,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "PVC lijm KE66 per emmer": {
+      "item_code": "2141",
+      "purchase_price": 84.74,
+      "base_price": 106.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "PVC lijm KE66 per m2 incl. aanbrengen": {
+      "item_code": "21452",
+      "purchase_price": 1.88,
+      "base_price": 2.90,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Vloeren": {
+    "Leveren PVC vloer P603 incl. 12% snijverlies": {
+      "item_code": "",
+      "purchase_price": 14.50,
+      "base_price": 24.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren PVC vloer P370 incl. 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 12.95,
+      "base_price": 22.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren PVC vloer PV50/PV60 Sentima/Venera incl. 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 9.25,
+      "base_price": 19.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren PVC vloer P420 incl. 7%": {
+      "item_code": "",
+      "purchase_price": 12.50,
+      "base_price": 22.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren PVC vloer P440 incl. 7%": {
+      "item_code": "",
+      "purchase_price": 12.50,
+      "base_price": 22.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren PVC vloer P430 incl. 7%": {
+      "item_code": "",
+      "purchase_price": 12.50,
+      "base_price": 22.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren PVC vloer P610 Spigato incl. 10% snijverlies": {
+      "item_code": "",
+      "purchase_price": 13.50,
+      "base_price": 23.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren E-VC vloer P700 incl 10% snijverlies": {
+      "item_code": "",
+      "purchase_price": 21.48,
+      "base_price": 31.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren E-VC vloer P500 incl 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 21.47,
+      "base_price": 31.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren PVC vloer P341-XL tegel incl. 10% snijverlies": {
+      "item_code": "0015",
+      "purchase_price": 12.95,
+      "base_price": 22.95,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Hebeta Vloeren": {
+    "Hebeta in rechte strook Charente XL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 15.80,
+      "base_price": 25.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in rechte strook Chamonix XL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 15.80,
+      "base_price": 25.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in rechte strook Progress XL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 15.80,
+      "base_price": 25.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in rechte strook Clair Mont XL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 16.80,
+      "base_price": 26.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in rechte strook Cayenne XL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 15.80,
+      "base_price": 25.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in rechte strook Largo XXL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 15.80,
+      "base_price": 25.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in visgraat Charente XL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 16.80,
+      "base_price": 26.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in visgraat Chamonix XL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 16.80,
+      "base_price": 26.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in visgraat Progress XL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 16.80,
+      "base_price": 26.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in visgraat Clair Mont XL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 17.60,
+      "base_price": 27.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in visgraat Cayenne XL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 16.80,
+      "base_price": 26.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta in visgraat Largo XXL 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 16.80,
+      "base_price": 26.95,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Rails & Gordijnen": {
+    "Leveren Caro rail wandbevestiging incl. eindstop, rail, runners, wandsteunen per meter": {
+      "item_code": "",
+      "purchase_price": 3.86,
+      "base_price": 4.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren Caro rail plafondbevestiging incl. eindstop, rail, runners, plafondsteunen per meter": {
+      "item_code": "",
+      "purchase_price": 4.10,
+      "base_price": 5.25,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren Caro rail wandbevestiging incl. afstandhouder 5cm eindstop, rail, runners, wandsteunen": {
+      "item_code": "",
+      "purchase_price": 5.64,
+      "base_price": 6.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Gordijn 1.40 breed x 1.75 hoog en 1 x 2.40 breed x 2.40 hoog dim-out en brandvertragend": {
+      "item_code": "0081",
+      "purchase_price": 0.00,
+      "base_price": 1795.40,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Leveren en monteren rails CARO zwart 25 meter incl. snijverlies, bevestigingsmateriaal": {
+      "item_code": "0083",
+      "purchase_price": 0.00,
+      "base_price": 361.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Montage gordijnrails incl. bevestigingsmateriaal en ophangen gordijnen": {
+      "item_code": "0090",
+      "purchase_price": 0.00,
+      "base_price": 240.00,
+      "description": "21%",
+      "ask_qty": false
+    }
+  },
+  "Betondesign & Tapijttegels": {
+    "Hebeta Betondesign 91x91 5.0m2 10% snijverlies": {
+      "item_code": "",
+      "purchase_price": 17.00,
+      "base_price": 27.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Hebeta Betondesign 91x45cm 4.18m2 7% snijverlies": {
+      "item_code": "",
+      "purchase_price": 17.75,
+      "base_price": 27.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Belakos rechtestrook 7%": {
+      "item_code": "",
+      "purchase_price": 14.35,
+      "base_price": 29.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Plaatsen tappijttegels in U1000 antisliplijm per m2": {
+      "item_code": "",
+      "purchase_price": 17.60,
+      "base_price": 27.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Uzin U1000 antisliplijm": {
+      "item_code": "",
+      "purchase_price": 17.60,
+      "base_price": 27.95,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Droogloopmatten": {
+    "Leveren en insnijden droogloopmat M205 - Kleur n.b.t Breedte: 130cm - per meter": {
+      "item_code": "",
+      "purchase_price": 39.46,
+      "base_price": 75.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M205 - Kleur n.b.t Breedte: 200cm - per meter": {
+      "item_code": "",
+      "purchase_price": 60.70,
+      "base_price": 95.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M200 - Kleur n.b.t Breedte: 80cm - Lengte 120cm": {
+      "item_code": "",
+      "purchase_price": 47.64,
+      "base_price": 83.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M200 - Kleur n.b.t Breedte: 130cm - per meter": {
+      "item_code": "",
+      "purchase_price": 73.29,
+      "base_price": 115.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M200 - Kleur n.b.t Breedte: 200cm - per meter": {
+      "item_code": "",
+      "purchase_price": 37.02,
+      "base_price": 75.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M220 - Kleur n.b.t Breedte: 130cm - per meter": {
+      "item_code": "",
+      "purchase_price": 46.68,
+      "base_price": 82.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M220 - Kleur n.b.t Breedte: 200cm - per meter": {
+      "item_code": "",
+      "purchase_price": 71.82,
+      "base_price": 112.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M255 - Kleur n.b.t Breedte: 130cm - per meter": {
+      "item_code": "",
+      "purchase_price": 45.72,
+      "base_price": 82.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M255 - Kleur n.b.t Breedte: 200cm - per meter": {
+      "item_code": "",
+      "purchase_price": 70.33,
+      "base_price": 112.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M215 - Kleur n.b.t Breedte: 130cm - per meter": {
+      "item_code": "",
+      "purchase_price": 52.46,
+      "base_price": 88.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M215 - Kleur n.b.t Breedte: 200cm - per meter": {
+      "item_code": "",
+      "purchase_price": 80.70,
+      "base_price": 123.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M210 - Kleur n.b.t Breedte: 130cm - per meter": {
+      "item_code": "",
+      "purchase_price": 42.35,
+      "base_price": 78.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en insnijden droogloopmat M210 - Kleur n.b.t Breedte: 200cm - per meter": {
+      "item_code": "",
+      "purchase_price": 65.15,
+      "base_price": 105.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren drooglooptegels (50x50cm) Coral classic": {
+      "item_code": "",
+      "purchase_price": 37.50,
+      "base_price": 46.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Plaatsen drooglooptegels Coral classic (excl. lijm)": {
+      "item_code": "",
+      "purchase_price": 0.00,
+      "base_price": 8.00,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Plinten & Profielen": {
+    "Leveren MDF vochtwerend & afgelakte plint RAL 9010 70x12mm": {
+      "item_code": "",
+      "purchase_price": 1.77,
+      "base_price": 3.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren MDF vochtwerend & afgelakte plint RAL 9010 90x12mm": {
+      "item_code": "",
+      "purchase_price": 2.15,
+      "base_price": 4.79,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren MDF vochtwerend & afgelakte plint RAL 9010 120x12mm": {
+      "item_code": "",
+      "purchase_price": 2.97,
+      "base_price": 5.85,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en plaatsen MDF vochtwerend & afgelakte plint RAL 9010 70x12mm": {
+      "item_code": "",
+      "purchase_price": 1.77,
+      "base_price": 10.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en plaatsen MDF vochtwerend & afgelakte plint RAL 9010 90x12mm": {
+      "item_code": "",
+      "purchase_price": 2.15,
+      "base_price": 11.79,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren en plaatsen MDF vochtwerend & afgelakte plint RAL 9010 120x12mm": {
+      "item_code": "",
+      "purchase_price": 2.97,
+      "base_price": 12.85,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Trappen": {
+    "Traptredeset per pak t.w.v. 4 tredes kleur n.t.b. profielset incl. stootborden (Cotap)": {
+      "item_code": "",
+      "purchase_price": 64.72,
+      "base_price": 99.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Traptredeset per pak t.w.v. 4 tredes kleur n.t.b. profielset excl. stootborden incl. montage (Cotap)": {
+      "item_code": "",
+      "purchase_price": 175.00,
+      "base_price": 300.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Traptredeset per pak t.w.v. 4 tredes kleur n.t.b. profielset incl. stootborden & montage (Cotap)": {
+      "item_code": "",
+      "purchase_price": 184.72,
+      "base_price": 344.44,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Traptredeset per pak t.w.v. 4 tredes kleur n.t.b. profielset incl. stootborden (Belakos - profielen v. Cotap)": {
+      "item_code": "",
+      "purchase_price": 74.06,
+      "base_price": 109.95,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Traptredeset per pak t.w.v. 4 tredes kleur n.t.b. profielset excl. stootborden incl. montage (Belakos)": {
+      "item_code": "",
+      "purchase_price": 185.00,
+      "base_price": 310.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Traptredeset per pak t.w.v. 4 tredes kleur n.t.b. profielset incl. stootborden & montage (Belakos)": {
+      "item_code": "",
+      "purchase_price": 195.00,
+      "base_price": 355.55,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Verwijderen": {
+    "Verwijderen vloer met mechanisme stripper tot 10 m2 incl. afvoeren afval": {
+      "item_code": "00157",
+      "purchase_price": 0.00,
+      "base_price": 15.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Verwijderen vloer met mechanisme stripper 10 tot 50 m2 incl. afvoeren afval": {
+      "item_code": "00158",
+      "purchase_price": 0.00,
+      "base_price": 14.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Verwijderen vloer met mechanisme stripper 50 tot 100 m2 incl. afvoeren afval": {
+      "item_code": "00159",
+      "purchase_price": 0.00,
+      "base_price": 12.50,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Verwijderen vloer met mechanisme stripper vanaf 100 m2 incl. afvoeren afval": {
+      "item_code": "001591",
+      "purchase_price": 0.00,
+      "base_price": 10.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Verwijderen en afvoeren huidige vloerbedekking kantoorpand": {
+      "item_code": "0054",
+      "purchase_price": 5.00,
+      "base_price": 7.00,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Tapijt & Trappen": {
+    "Tapijt op ondertapijt (Plaza/Strong) per m2": {
+      "item_code": "0031",
+      "purchase_price": 0.00,
+      "base_price": 32.75,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Traptrede (enkel) met PVC + antislip": {
+      "item_code": "0033",
+      "purchase_price": 0.00,
+      "base_price": 60.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Trap incl. stootborden met Avanto Beige": {
+      "item_code": "0034",
+      "purchase_price": 0.00,
+      "base_price": 95.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren tapijttegel Desso - Stratos (per m2)": {
+      "item_code": "0054",
+      "purchase_price": 0.00,
+      "base_price": 1.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Plaatsen Desso tapijttegel + pick-up lijm (per m2)": {
+      "item_code": "0055",
+      "purchase_price": 0.00,
+      "base_price": 8.00,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Akoestiek & Mos": {
+    "Mosstrook frisgroen 50x50 cm + montage (per paneel)": {
+      "item_code": "0047",
+      "purchase_price": 16.95,
+      "base_price": 55.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Akoestische panelen 52.5x260 cm (per stuk)": {
+      "item_code": "0048",
+      "purchase_price": 85.00,
+      "base_price": 110.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Montage akoestische panelen (per paneel)": {
+      "item_code": "0049",
+      "purchase_price": 0.00,
+      "base_price": 15.00,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Gordijnen": {
+    "Gordijn dim-out brandvertragend (1.40x1.75 + 2.40x2.40)": {
+      "item_code": "0080",
+      "purchase_price": 0.00,
+      "base_price": 1795.40,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Rails CARO zwart 25m (incl. glijders, eindstops)": {
+      "item_code": "0081",
+      "purchase_price": 0.00,
+      "base_price": 361.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Montage gordijnrails + ophangen gordijnen": {
+      "item_code": "0083",
+      "purchase_price": 0.00,
+      "base_price": 240.00,
+      "description": "21%",
+      "ask_qty": false
+    }
+  },
+  "Buitenvoorzieningen": {
+    "Leveren tegelasbak 60x60 cm + RVS binnenbak": {
+      "item_code": "0090",
+      "purchase_price": 0.00,
+      "base_price": 325.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Onkosten/brandstofvergoeding": {
+      "item_code": "0091",
+      "purchase_price": 0.00,
+      "base_price": 37.50,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Plaatsen tegelasbak (per stuk)": {
+      "item_code": "0092",
+      "purchase_price": 0.00,
+      "base_price": 57.50,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Leveren+monteren kunststof afvalbak incl. paal": {
+      "item_code": "0093",
+      "purchase_price": 0.00,
+      "base_price": 405.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Leveren+monteren wandasbak": {
+      "item_code": "0094",
+      "purchase_price": 0.00,
+      "base_price": 180.00,
+      "description": "21%",
+      "ask_qty": false
+    }
+  },
+  "Keuken & Sanitair": {
+    "Kantoor pantry (incl. vaatwasser, koelkast, combi)": {
+      "item_code": "0020",
+      "purchase_price": 0.00,
+      "base_price": 100.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Vervangen afzuigkap AO460RVS": {
+      "item_code": "0021",
+      "purchase_price": 0.00,
+      "base_price": 165.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Afvalkosten plaatsing keuken": {
+      "item_code": "0021b",
+      "purchase_price": 0.00,
+      "base_price": 25.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Vervangen werkblad 1.80m + spoelbak": {
+      "item_code": "1111",
+      "purchase_price": 0.00,
+      "base_price": 880.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Vervangen verlichting onder keukenkast": {
+      "item_code": "1112",
+      "purchase_price": 0.00,
+      "base_price": 120.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Vervangen keukenkast (excl. spoelkast)": {
+      "item_code": "1115",
+      "purchase_price": 0.00,
+      "base_price": 220.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Inbouw koelkast Zanussi ZEAN82FR": {
+      "item_code": "0101",
+      "purchase_price": 0.00,
+      "base_price": 1.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Kookplaat inductie Zanussi ZILN646K": {
+      "item_code": "0102",
+      "purchase_price": 0.00,
+      "base_price": 1.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Aansluiten kokendwaterkraan": {
+      "item_code": "0110",
+      "purchase_price": 0.00,
+      "base_price": 150.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "HansGrohe eengreepsmengkraan + sifon": {
+      "item_code": "0120",
+      "purchase_price": 69.00,
+      "base_price": 89.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Vervangen Hansgrohe Logis 120 eengreepskraan": {
+      "item_code": "1110",
+      "purchase_price": 0.00,
+      "base_price": 100.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Vervangen schuifdeur 3-delig tbv doucheruimte": {
+      "item_code": "1121",
+      "purchase_price": 0.00,
+      "base_price": 790.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "Vervangen douchecabine 80x80x200 cm hoekinstap": {
+      "item_code": "1122",
+      "purchase_price": 0.00,
+      "base_price": 670.00,
+      "description": "21%",
+      "ask_qty": false
+    }
+  },
+  "Overige Diensten": {
+    "Inmeetkosten per adres": {
+      "item_code": "1113",
+      "purchase_price": 0.00,
+      "base_price": 35.00,
+      "description": "21%",
+      "ask_qty": false
+    },
+    "No show kosten huurder/bewoner": {
+      "item_code": "1114",
+      "purchase_price": 0.00,
+      "base_price": 35.00,
+      "description": "21%",
+      "ask_qty": false
+    }
+  },
+  "Schilder & Behang": {
+    "Stucwerk (per m2)": {
+      "item_code": "0200",
+      "purchase_price": 0.00,
+      "base_price": 24.50,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Spuitwerk plafond zwart (per m2)": {
+      "item_code": "0300",
+      "purchase_price": 0.00,
+      "base_price": 15.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Verwijderen behang (met stoom/afweek)": {
+      "item_code": "1201",
+      "purchase_price": 0.00,
+      "base_price": 1620.00,
+      "description": "21%",
+      "ask_qty": true
+    }
+  },
+  "Uzin Producten": {
+    "Vezelversterkte egaline Uzin NC115 (per zak)": {
+      "item_code": "QF115",
+      "purchase_price": 0.00,
+      "base_price": 29.85,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Egaline Uzin NC150 (per zak)": {
+      "item_code": "QF150",
+      "purchase_price": 0.00,
+      "base_price": 23.85,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Uzin carbonprimer PE280 (per can)": {
+      "item_code": "QFPE280",
+      "purchase_price": 0.00,
+      "base_price": 138.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Primer Uzin PE360 (per can)": {
+      "item_code": "QFPE360",
+      "purchase_price": 0.00,
+      "base_price": 75.00,
+      "description": "21%",
+      "ask_qty": true
+    },
+    "Reparatiemortel Uzin RM182 (per zak)": {
+      "item_code": "QFRM182",
+      "purchase_price": 0.00,
+      "base_price": 33.00,
+      "description": "21%",
+      "ask_qty": true
+    }
+  }
+};
+ // Note: EMBEDDED_JSON is assumed to be defined elsewhere as per your original code
+        if (typeof htm === 'undefined') {
+            console.error('htm is not defined. Please ensure the htm library is loaded correctly.');
+        } else {
+            const { useState, useMemo, useEffect } = React;
+            const html = htm.bind(React.createElement);
+            const TAX_RATE = 0.21;
+
+            function getUnit(productName) {
+                const nameLower = productName.toLowerCase();
+                if (nameLower.includes('m2')) return 'm²';
+                if (nameLower.includes('meter')) return 'meter';
+                if (nameLower.includes('zak') || nameLower.includes('can') || nameLower.includes('emmer') || nameLower.includes('rol')) return 'stuks';
+                return 'stuks';
+            }
+
+            function getPredefinedSize(productName) {
+                const nameLower = productName.toLowerCase();
+                if (nameLower.includes('jumpax classic per pak') || nameLower.includes('jumpax basic per pak')) {
+                    return { size: 2.88, unit: 'm²', type: 'package' };
+                }
+                if (nameLower.includes('pe folie per rol')) {
+                    return { size: 100, unit: 'm²', type: 'package' };
+                }
+                if (nameLower.includes('mosstrook frisgroen')) {
+                    return { size: 0.25, unit: 'm²', type: 'piece' };
+                }
+                if (nameLower.includes('akoestische panelen')) {
+                    return { size: 1.365, unit: 'm²', type: 'piece' };
+                }
+                if (nameLower.includes('traptredeset per pak')) {
+                    return { size: 4, unit: 'tredes', type: 'package' };
+                }
+                if (nameLower.includes('hebeta betondesign 91x91')) {
+                    return { size: 5.0, unit: 'm²', type: 'package' };
+                }
+                if (nameLower.includes('hebeta betondesign 91x45')) {
+                    return { size: 4.18, unit: 'm²', type: 'package' };
+                }
+                return null;
+            }
+
+            function QuantityPopup({ onClose, onConfirm, unit, productName }) {
+                const [useArea, setUseArea] = useState(false);
+                const [width, setWidth] = useState('');
+                const [length, setLength] = useState('');
+                const [quantity, setQuantity] = useState('');
+                const inputRef = React.useRef(null);
+                const predefinedSize = getPredefinedSize(productName);
+                useEffect(() => {
+                    if (inputRef.current) inputRef.current.focus();
+                }, []);
+                const handleKeyDown = (e) => {
+                    if (e.key === 'Escape') {
+                        onClose();
+                    } else if (e.key === 'Enter') {
+                        if (quantity === '' && !useArea) {
+                            onConfirm(1);
+                        } else {
+                            let qty;
+                            if (useArea && unit === 'm²') {
+                                const w = parseFloat(width.replace(',', '.')) || 0;
+                                const l = parseFloat(length.replace(',', '.')) || 0;
+                                qty = w && l ? w * l : 1;
+                            } else {
+                                qty = parseFloat(quantity.replace(',', '.')) || 1;
+                            }
+                            if (isNaN(qty)) qty = 1;
+                            if (predefinedSize) {
+                                if (predefinedSize.type === 'package') {
+                                    qty = Math.ceil(qty / predefinedSize.size);
+                                } else if (predefinedSize.type === 'piece') {
+                                    qty = Math.ceil(qty / predefinedSize.size);
+                                }
+                            }
+                            onConfirm(qty);
+                        }
+                    }
+                };
+                return html`
+                    <div>
+                        ${predefinedSize && html`
+                            <div className="mb-2 p-2 bg-yellow-50 rounded">
+                                <p className="text-sm">
+                                    ${predefinedSize.type === 'package' ? 
+                                        `Dit product wordt verkocht in pakketten van ${predefinedSize.size} ${predefinedSize.unit}.` :
+                                        `Dit product heeft een vaste grootte van ${predefinedSize.size} ${predefinedSize.unit} per stuk.`
+                                    }
+                                </p>
+                            </div>
+                        `}
+                        ${unit === 'm²' && !predefinedSize && html`
+                            <label className="block mb-2">
+                                <input type="checkbox" checked=${useArea} onChange=${(e) => setUseArea(e.target.checked)} />
+                                Bereken oppervlakte uit breedte en lengte
+                            </label>
+                        `}
+                        ${useArea && unit === 'm²' && !predefinedSize ? html`
+                            <div className="mb-2">
+                                <label className="block text-sm">Breedte (m)</label>
+                                <input type="text" value=${width} onChange=${(e) => setWidth(e.target.value)} className="w-full p-1 border rounded" ref=${inputRef} onKeyDown=${handleKeyDown} />
+                            </div>
+                            <div className="mb-2">
+                                <label className="block text-sm">Lengte (m)</label>
+                                <input type="text" value=${length} onChange=${(e) => setLength(e.target.value)} className="w-full p-1 border rounded" onKeyDown=${handleKeyDown} />
+                            </div>
+                        ` : html`
+                            <div className="mb-2">
+                                <label className="block text-sm">
+                                    ${predefinedSize ? 
+                                        `Benodigde ${predefinedSize.unit} (wordt omgerekend naar ${predefinedSize.type === 'package' ? 'pakketten' : 'stuks'})` : 
+                                        `Hoeveelheid (${unit})`
+                                    }
+                                </label>
+                                <input 
+                                    type="text" 
+                                    value=${quantity} 
+                                    onChange=${(e) => setQuantity(e.target.value)}
+                                    className="w-full p-1 border rounded"
+                                    ref=${inputRef}
+                                    onKeyDown=${handleKeyDown}
+                                />
+                            </div>
+                        `}
+                        <div className="flex justify-end space-x-2">
+                            <button onClick=${onClose} className="bg-gray-300 text-black p-2 rounded hover:bg-gray-400">
+                                Annuleren
+                            </button>
+                            <button onClick=${(e) => {
+                                e.preventDefault();
+                                if (quantity === '' && !useArea) {
+                                    onConfirm(1);
+                                } else {
+                                    let qty;
+                                    if (useArea && unit === 'm²') {
+                                        const w = parseFloat(width.replace(',', '.')) || 0;
+                                        const l = parseFloat(length.replace(',', '.')) || 0;
+                                        qty = w && l ? w * l : 1;
+                                    } else {
+                                        qty = parseFloat(quantity.replace(',', '.')) || 1;
+                                    }
+                                    if (isNaN(qty)) qty = 1;
+                                    if (predefinedSize) {
+                                        if (predefinedSize.type === 'package') {
+                                            qty = Math.ceil(qty / predefinedSize.size);
+                                        } else if (predefinedSize.type === 'piece') {
+                                            qty = Math.ceil(qty / predefinedSize.size);
+                                        }
+                                    }
+                                    onConfirm(qty);
+                                }
+                            }} className="bg-[#008c95] text-white p-2 rounded hover:bg-[#f2c75c] hover:text-[#008c95]">
+                                Bevestigen
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function CollapsibleCategory({ catName, products, onProductClick }) {
+                const [isOpen, setIsOpen] = useState(false);
+                const [tooltipPosition, setTooltipPosition] = useState(null);
+                const [productTooltip, setProductTooltip] = useState(null);
+
+                const handleMouseEnter = (e) => {
+                    const productList = Object.keys(products).map(product => `• ${product}`).join('\n');
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const viewportWidth = window.innerWidth;
+                    let x = e.clientX + 10;
+                    let y = e.clientY + 10;
+                    if (x + 300 > viewportWidth) {
+                        x = Math.max(10, viewportWidth - 310);
+                    }
+                    setTooltipPosition({
+                        content: productList,
+                        x,
+                        y
+                    });
+                };
+                const handleMouseLeave = () => {
+                    setTooltipPosition(null);
+                };
+                const handleProductMouseEnter = (e, product, data) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const viewportWidth = window.innerWidth;
+                    let x = e.clientX + 10;
+                    let y = e.clientY + 10;
+                    if (x + 300 > viewportWidth) {
+                        x = Math.max(10, viewportWidth - 310);
+                    }
+                    setProductTooltip({
+                        content: `${product}\nPrijs (excl.): €${data.base_price?.toFixed(2) ?? '-'}\nPrijs (incl.): €${(data.base_price ? (data.base_price * 1.21).toFixed(2) : '-')}`,
+                        x,
+                        y
+                    });
+                };
+                const handleProductMouseLeave = () => {
+                    setProductTooltip(null);
+                };
+                return html`
+                    <div className="relative">
+                        <button
+                            onClick=${() => setIsOpen(!isOpen)}
+                            onMouseEnter=${handleMouseEnter}
+                            onMouseLeave=${handleMouseLeave}
+                            className="w-full text-left p-2 bg-[#008c95] text-white rounded hover:bg-[#f2c75c] hover:text-black flex justify-between items-center"
+                        >
+                            <span className="truncate flex-1 mr-2">${catName}</span>
+                            <span className="flex-shrink-0">${isOpen ? '▲' : '▼'}</span>
+                        </button>
+                        ${tooltipPosition && html`
+                            <div
+                                className="category-tooltip"
+                                style=${{
+                                    left: `${tooltipPosition.x}px`,
+                                    top: `${tooltipPosition.y}px`,
+                                }}
+                            >
+                                <strong className="block mb-1">${catName} bevat:</strong>
+                                <pre className="text-sm whitespace-pre-wrap">${tooltipPosition.content}</pre>
+                            </div>
+                        `}
+                        ${isOpen && html`
+                            <div className="ml-4 mt-2 space-y-1">
+                                ${Object.entries(products).map(([product, data]) => html`
+                                    <div 
+                                        key=${product} 
+                                        className="flex justify-between items-center p-1 hover:bg-[#f2c75c] hover:text-black rounded gap-2 cursor-pointer"
+                                        onClick=${(e) => onProductClick(catName, product, data, e)}
+                                        onMouseEnter=${(e) => handleProductMouseEnter(e, product, data)}
+                                        onMouseLeave=${handleProductMouseLeave}
+                                    >
+                                        <span className="text-sm truncate flex-1" >${product}</span>
+                                        <button
+                                            className="bg-[#008c95] text-white px-2 py-1 rounded hover:bg-[#f2c75c] hover:text-black flex-shrink-0"
+                                            onClick=${(e) => {
+                                                e.stopPropagation();
+                                                onProductClick(catName, product, data, e);
+                                            }}
+                                        >
+                                            Voeg toe
+                                        </button>
+                                    </div>
+                                `)}
+                                ${productTooltip && html`
+                                    <div
+                                        className="category-tooltip"
+                                        style=${{
+                                            left: `${productTooltip.x}px`,
+                                            top: `${productTooltip.y}px`,
+                                        }}
+                                    >
+                                        <pre className="text-sm whitespace-pre-wrap">${productTooltip.content}</pre>
+                                    </div>
+                                `}
+                            </div>
+                        `}
+                    </div>
+                `;
+            }
+
+            function OfferteTool() {
+                const [sidebarOpen, setSidebarOpen] = useState(true);
+                const [searchQuery, setSearchQuery] = useState('');
+                const [quoteItems, setQuoteItems] = useState([]);
+                const [showQuantityPopup, setShowQuantityPopup] = useState(false);
+                const [currentProduct, setCurrentProduct] = useState(null);
+                const [currentCategory, setCurrentCategory] = useState(null);
+                const [currentData, setCurrentData] = useState(null);
+                const [popupButtonRect, setPopupButtonRect] = useState(null);
+                const [previewWidth, setPreviewWidth] = useState('w-3/5');
+                const [calcCollapsed, setCalcCollapsed] = useState(true);
+
+                // NEW: Function to calculate button position
+                const calculateButtonPosition = (rect) => {
+                    if (!rect) {
+                        // Fallback: Center of the screen
+                        console.log('Using fallback position: no rect provided');
+                        return {
+                            left: window.innerWidth / 2,
+                            top: window.innerHeight / 2,
+                            transform: 'translate(-50%, -50%)',
+                            backgroundColor: '#ff0000' // Red to indicate fallback
+                        };
+                    }
+
+                    const buttonHeight = 40; // Estimated button height
+                    const offset = 10; // Space below button
+                    const left = rect.left + rect.width / 2;
+                    const topBelow = rect.bottom + offset;
+                    const wouldOverflow = topBelow + buttonHeight > window.innerHeight;
+                    const top = wouldOverflow ? rect.top - buttonHeight - offset : topBelow;
+
+                    console.log('Button Position:', { left, top, wouldOverflow, rect }); // DEBUG
+                    return {
+                        left,
+                        top,
+                        transform: 'translateX(-50%)',
+                        backgroundColor: '#008c95'
+                    };
+                };
+
+                const openQuantityPopup = (cat, product, data, event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setCurrentCategory(cat);
+                    setCurrentProduct(product);
+                    setCurrentData(data);   
+                    
+                    if (data.ask_qty === false) {
+                        addToQuote(1);
+                        return;
+                    }
+
+                    const buttonRect = event.currentTarget.getBoundingClientRect();
+                    console.log('Button Rect:', buttonRect); // DEBUG
+                    setPopupButtonRect(buttonRect);
+                    setShowQuantityPopup(true);
+                };
+
+                const closeQuantityPopup = () => {
+                    setShowQuantityPopup(false);
+                    setPopupButtonRect(null);
+                    setCurrentProduct(null);
+                    setCurrentCategory(null);
+                    setCurrentData(null);
+                };
+
+                const handleSkip = () => {
+                    addToQuote(1);
+                    closeQuantityPopup();
+                };
+
+                const addToQuote = (qty) => {
+                    if (!currentProduct || !currentCategory || !currentData) return;
+                    
+                    setQuoteItems(prev => [...prev, {
+                        isEditing: false,
+                        item_code: currentData.item_code || '',
+                        category: currentCategory,
+                        product: currentProduct,
+                        quantity: qty,
+                        unit_price_excl: currentData.base_price || 0,
+                        total_price_excl: (currentData.base_price || 0) * qty,
+                        description: currentData.description || ''
+                    }]);
+                    
+                    closeQuantityPopup();
+                };
+
+                const [rooms, setRooms] = useState([]);
+                const [notes, setNotes] = useState('');
+                const [checklist, setChecklist] = useState({
+                    egaNeeded: false,
+                    egaType: 'none',
+                    plinten: false,
+                    vloerverwarming: false,
+                    afval: false
+                });
+                const [expression, setExpression] = useState('');
+                const [result, setResult] = useState('');
+                const [history, setHistory] = useState([]);
+                const [showHistory, setShowHistory] = useState(false);
+                const [editingItem, setEditingItem] = useState(null);
+
+                const productDb = useMemo(() => {
+                    try {
+                        return JSON.parse(JSON.stringify(EMBEDDED_JSON));
+                    } catch {
+                        return {};
+                    }
+                }, []);
+
+                const filteredCategories = useMemo(() => {
+                    if (!searchQuery) return productDb;
+                    const query = searchQuery.toLowerCase();
+                    const filtered = {};
+                    Object.entries(productDb).forEach(([cat, products]) => {
+                        if (cat.toLowerCase().includes(query)) {
+                            filtered[cat] = products;
+                        } else {
+                            const matched = {};
+                            Object.entries(products).forEach(([pname, pdata]) => {
+                                if (pname.toLowerCase().includes(query)) {
+                                    matched[pname] = pdata;
+                                }
+                            });
+                            if (Object.keys(matched).length) filtered[cat] = matched;
+                        }
+                    });
+                    return filtered;
+                }, [searchQuery, productDb]);
+
+                const totalExcl = useMemo(() => {
+                    return quoteItems.reduce((sum, item) => sum + (item.total_price_excl || 0), 0);
+                }, [quoteItems]);
+
+                const totalIncl = totalExcl * (1 + TAX_RATE);
+
+                const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+                const handleSearch = (e) => setSearchQuery(e.target.value);
+
+                const handleChecklistChange = (key, value) => {
+                    setChecklist(prev => ({ ...prev, [key]: value }));
+                    if (key === 'egaNeeded' && !value) {
+                        setChecklist(prev => ({ ...prev, egaType: 'none' }));
+                    }
+                };
+
+                const addNotesToQuote = () => {
+                    if (!notes.trim()) return alert('Geen notities om toe te voegen.');
+                    setQuoteItems(prev => [...prev, {
+                        item_code: 'NOTES',
+                        category: 'Notities',
+                        product: notes.replace(/\n/g, ' '),
+                        quantity: 1,
+                        unit_price_excl: 0,
+                        total_price_excl: 0
+                    }]);
+                    setNotes('');
+                };
+
+                const addRoom = (width, length, name) => {
+                    try {
+                        const w = parseFloat(width.replace(',', '.'));
+                        const l = parseFloat(length.replace(',', '.'));
+                        const area = w * l;
+                        setRooms(prev => [...prev, { width: w, length: l, name: name || 'Ruimte', area }]);
+                    } catch {
+                        alert('Ongeldige invoer voor breedte/lengte.');
+                    }
+                };
+
+                const addRoomsToQuote = () => {
+                    if (!rooms.length) return alert('Geen ruimtes om toe te voegen.');
+                    const totalArea = rooms.reduce((sum, r) => sum + r.area, 0);
+                    const productName = rooms.map(r => `(${r.width}x${r.length}) ${r.area.toFixed(2)}m² ${r.name}`).join(' + ');
+                    setQuoteItems(prev => [...prev, {
+                        item_code: 'MEET',
+                        category: 'Metingen',
+                        product: productName,
+                        quantity: totalArea,
+                        unit_price_excl: 0,
+                        total_price_excl: 0
+                    }]);
+                    setRooms([]);
+                };
+
+                const removeQuoteItem = (index) => {
+                    setQuoteItems(prev => prev.filter((_, i) => i !== index));
+                };
+
+                const duplicateQuoteItem = (index) => {
+                    setQuoteItems(prev => [...prev, { ...prev[index] }]);
+                };
+
+                const editQuoteItem = (index, field, value) => {
+                    setQuoteItems(prev => {
+                        const newItems = [...prev];
+                        const parsedValue = (field === 'quantity' || field === 'unit_price_excl') ? parseFloat(value) || 0 : value;
+                        newItems[index] = { ...newItems[index], [field]: parsedValue };
+                        if (field === 'quantity' || field === 'unit_price_excl') {
+                            const qty = parseFloat(newItems[index].quantity) || 0;
+                            const price = parseFloat(newItems[index].unit_price_excl) || 0;
+                            newItems[index].total_price_excl = qty * price;
+                        }
+                        return newItems;
+                    });
+                };
+
+                const exportToCSV = () => {
+                    const headers = ['Code,Categorie,Product,Aantal,€/st (excl.),Totaal (excl.),Btw'];
+                    const rows = quoteItems.map(item => [
+                        item.item_code,
+                        item.category,
+                        `"${item.product.replace(/"/g, '""')}"`,
+                        item.quantity,
+                        item.unit_price_excl.toFixed(2),
+                        item.total_price_excl.toFixed(2),
+                        `"${(item.description || '').replace(/"/g, '""')}"`
+                    ].join(','));
+                    const csv = [...headers, ...rows].join('\n');
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', 'offerte.csv');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                };
+
+                const addReiskosten = () => {
+                    setQuoteItems(prev => [...prev, {
+                        item_code: 'REIS',
+                        category: 'Overige Diensten',
+                        product: 'Reiskosten',
+                        quantity: 1,
+                        unit_price_excl: 45,
+                        total_price_excl: 45,
+                        description: '21%'
+                    }]);
+                };
+
+                const addKleinMateriaal = () => {
+                    setQuoteItems(prev => [...prev, {
+                        item_code: 'KLEIN',
+                        category: 'Overige Diensten',
+                        product: 'Klein materiaal',
+                        quantity: 1,
+                        unit_price_excl: 25.95,
+                        total_price_excl: 25.95,
+                        description: '21%'
+                    }]);
+                };
+
+                const handleCalculatorInput = (value) => {
+                    if (value === 'C') {
+                        setExpression('');
+                        setResult('');
+                    } else if (value === '=') {
+                        try {
+                            const evalResult = eval(expression);
+                            setResult(evalResult.toString());
+                            setHistory(prev => [...prev, { expression, result: evalResult, unit: '' }].slice(-5));
+                        } catch {
+                            setResult('Error');
+                        }
+                    } else {
+                        setExpression(prev => prev + value);
+                    }
+                };
+
+                const appendUnit = (unit) => {
+                    if (result) {
+                        setHistory(prev => {
+                            const last = prev[prev.length - 1];
+                            if (last && last.result === parseFloat(result)) {
+                                last.unit = unit;
+                            }
+                            return [...prev];
+                        });
+                        setResult(`${result} ${unit}`);
+                    }
+                };
+
+                const handleKeyDown = (e) => {
+                    if (e.key === 'Enter') {
+                        handleCalculatorInput('=');
+                    } else if (e.key === 'Escape') {
+                        handleCalculatorInput('C');
+                    } else if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/'].includes(e.key)) {
+                        setExpression(prev => prev + e.key);
+                    }
+                };
+
+                const toggleEdit = (index) => {
+                    setQuoteItems(prev => prev.map((item, idx) => ({
+                        ...item,
+                        isEditing: idx === index ? !item.isEditing : false
+                    })));
+                };
+
+                const clearAll = () => {
+                    if (confirm('Weet je zeker dat je alle items wilt verwijderen?')) {
+                        setQuoteItems([]);
+                    }
+                };
+
+                const copyToClipboard = () => {
+                    const headers = ['Code', 'Categorie', 'Product', 'Aantal', '€/st (excl.)', 'Totaal (incl.)', 'Btw'];
+                    const rows = quoteItems.map(item => [
+                        item.item_code,
+                        item.category,
+                        item.product,
+                        item.quantity,
+                        item.unit_price_excl.toFixed(2),
+                        (item.total_price_excl * (1 + TAX_RATE)).toFixed(2),
+                        item.description || ''
+                    ]);
+                    
+                    const textData = [
+                        headers.join('\t'),
+                        ...rows.map(row => row.join('\t')),
+                        '',
+                        `Totaal incl. BTW (21%): €${totalIncl.toFixed(2)}`
+                    ].join('\n');
+
+                    navigator.clipboard.writeText(textData).then(() => {
+                        alert('Offerte is gekopieerd naar het klembord!');
+                    }).catch(() => {
+                        alert('Kon niet kopiëren naar klembord. Probeer het opnieuw.');
+                    });
+                };
+
+                return html`
+                    <div className="flex h-screen overflow-hidden">
+                        <div className=${ `bg-white shadow-lg transition-all duration-300 ${sidebarOpen ? 'w-80' : 'w-16'} flex-shrink-0 animate-slide-in` }>
+                            <div className="p-4">
+                                <button onClick=${toggleSidebar} className="text-[#008c95] hover:text-[#f2c75c] mb-4">
+                                    ${sidebarOpen ? '<< Sluiten' : '>> Openen'}
+                                </button>
+                                ${sidebarOpen && html`
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-bold text-[#008c95]">Zoeken</label>
+                                            <input
+                                                type="text"
+                                                value=${searchQuery}
+                                                onChange=${handleSearch}
+                                                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f2c75c]"
+                                                placeholder="Zoek categorieën/producten..."
+                                            />
+                                        </div>
+                                        <div className="bg-[#f2c75c]/10 p-3 rounded">
+                                            <h3 className="text-sm font-bold text-[#008c95]">Checklist</h3>
+                                            <label className="flex items-center space-x-2">
+                                                <input
+                                                    type="checkbox"
+                                                    checked=${checklist.egaNeeded}
+                                                    onChange=${(e) => handleChecklistChange('egaNeeded', e.target.checked)}
+                                                />
+                                                <span>Egaliseren nodig?</span>
+                                            </label>
+                                            ${checklist.egaNeeded && html`
+                                                <div className="ml-4 flex space-x-2">
+                                                    ${['Cement', 'Gips', 'Turbo', 'Vezel'].map(type => html`
+                                                        <label key=${type} className="flex items-center">
+                                                            <input
+                                                                type="radio"
+                                                                name="egaType"
+                                                                value=${type.toLowerCase()}
+                                                                checked=${checklist.egaType === type.toLowerCase()}
+                                                                onChange=${() => handleChecklistChange('egaType', type.toLowerCase())}
+                                                            />
+                                                            <span className="ml-1">${type}</span>
+                                                        </label>
+                                                    `)}
+                                                </div>
+                                            `}
+                                            <label className="flex items-center space-x-2">
+                                                <input
+                                                    type="checkbox"
+                                                    checked=${checklist.plinten}
+                                                    onChange=${(e) => handleChecklistChange('plinten', e.target.checked)}
+                                                />
+                                                <span>Plinten inbegrepen?</span>
+                                            </label>
+                                            <label className="flex items-center space-x-2">
+                                                <input
+                                                    type="checkbox"
+                                                    checked=${checklist.vloerverwarming}
+                                                    onChange=${(e) => handleChecklistChange('vloerverwarming', e.target.checked)}
+                                                />
+                                                <span>Vloerverwarming voorbereid?</span>
+                                            </label>
+                                            <label className="flex items-center space-x-2">
+                                                <input
+                                                    type="checkbox"
+                                                    checked=${checklist.afval}
+                                                    onChange=${(e) => handleChecklistChange('afval', e.target.checked)}
+                                                />
+                                                <span>Afvalkosten toevoegen?</span>
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-bold text-[#008c95]">Notities</label>
+                                            <textarea
+                                                value=${notes}
+                                                onChange=${(e) => setNotes(e.target.value)}
+                                                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f2c75c]"
+                                                rows="2"
+                                                placeholder="Voeg notities toe..."
+                                            />
+                                            <button
+                                                onClick=${addNotesToQuote}
+                                                className="mt-2 w-full bg-[#008c95] text-white p-2 rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                            >
+                                                Toevoegen aan Offerte
+                                            </button>
+                                        </div>
+                                        <div className="bg-[#f2c75c]/10 p-3 rounded relative">
+                                            <button
+                                                onClick=${() => setCalcCollapsed(!calcCollapsed)}
+                                                className="absolute top-2 right-2 text-[#008c95] hover:text-[#f2c75c] focus:outline-none"
+                                                title=${calcCollapsed ? "Uitklappen" : "Inklappen"}
+                                            >
+                                                ${calcCollapsed ? '▼' : '▲'}
+                                            </button>
+                                            <h3 className="text-sm font-bold text-[#008c95]">m² Calculator</h3>
+                                            ${!calcCollapsed && html`
+                                                <div className="space-y-2">
+                                                    <input
+                                                        type="text"
+                                                        id="width"
+                                                        placeholder="Breedte (m)"
+                                                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f2c75c]"
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        id="length"
+                                                        placeholder="Lengte (m)"
+                                                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f2c75c]"
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        id="roomName"
+                                                        placeholder="Naam ruimte"
+                                                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f2c75c]"
+                                                    />
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick=${() => {
+                                                                const width = document.getElementById('width').value;
+                                                                const length = document.getElementById('length').value;
+                                                                const name = document.getElementById('roomName').value;
+                                                                addRoom(width, length, name);
+                                                                document.getElementById('width').value = '';
+                                                                document.getElementById('length').value = '';
+                                                                document.getElementById('roomName').value = '';
+                                                            }}
+                                                            className="flex-1 bg-[#008c95] text-white p-2 rounded hover:bg-[#f2c75c] hover:text-[#008c95] text-sm whitespace-nowrap"
+                                                        >
+                                                            Voeg ruimte toe
+                                                        </button>
+                                                        <button
+                                                            onClick=${addRoomsToQuote}
+                                                            className="flex-1 bg-[#008c95] text-white p-2 rounded hover:bg-[#f2c75c] hover:text-[#008c95] text-sm whitespace-nowrap"
+                                                        >
+                                                            Naar offerte
+                                                        </button>
+                                                    </div>
+                                                    <ul className="max-h-20 overflow-y-auto mt-2">
+                                                        ${rooms.map((room, index) => html`
+                                                            <li key=${index} className="text-sm">
+                                                                ${room.name}: ${room.area.toFixed(2)} m²
+                                                            </li>
+                                                        `)}
+                                                    </ul>
+                                                </div>
+                                            `}
+                                        </div>
+                                        <div className="bg-[#f2c75c]/10 p-3 rounded">
+                                            <h3 className="text-sm font-bold text-[#008c95]">Standaard Calculator</h3>
+                                            <div className="bg-white p-2 rounded">
+                                                <div className="flex items-center space-x-2 mb-2">
+                                                    <input
+                                                        type="text"
+                                                        value=${expression}
+                                                        onChange=${(e) => setExpression(e.target.value)}
+                                                        onKeyDown=${handleKeyDown}
+                                                        className="flex-1 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-[#f2c75c]"
+                                                        placeholder="Voer expressie in"
+                                                    />
+                                                </div>
+                                                <div className="text-right text-lg mb-2">
+                                                    ${result || expression || '0'}
+                                                </div>
+                                                <div className="grid grid-cols-4 gap-1">
+                                                    ${['7', '8', '9', '/'].map(btn => html`
+                                                        <button
+                                                            key=${btn}
+                                                            onClick=${() => handleCalculatorInput(btn)}
+                                                            className="p-2 bg-[#008c95] text-white rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                                        >
+                                                            ${btn}
+                                                        </button>
+                                                    `)}
+                                                    ${['4', '5', '6', '*'].map(btn => html`
+                                                        <button
+                                                            key=${btn}
+                                                            onClick=${() => handleCalculatorInput(btn)}
+                                                            className="p-2 bg-[#008c95] text-white rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                                        >
+                                                            ${btn}
+                                                        </button>
+                                                    `)}
+                                                    ${['1', '2', '3', '-'].map(btn => html`
+                                                        <button
+                                                            key=${btn}
+                                                            onClick=${() => handleCalculatorInput(btn)}
+                                                            className="p-2 bg-[#008c95] text-white rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                                        >
+                                                            ${btn}
+                                                        </button>
+                                                    `)}
+                                                    ${['0', '.', '+', '='].map(btn => html`
+                                                        <button
+                                                            key=${btn}
+                                                            onClick=${() => handleCalculatorInput(btn)}
+                                                            className="p-2 bg-[#008c95] text-white rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                                        >
+                                                            ${btn}
+                                                        </button>
+                                                    `)}
+                                                </div>
+                                                <div className="flex space-x-2 mt-2">
+                                                    ${['€', 'm²', 'stuks'].map(unit => html`
+                                                        <button
+                                                            key=${unit}
+                                                            onClick=${() => appendUnit(unit)}
+                                                            className="p-2 bg-[#008c95] text-white rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                                        >
+                                                            ${unit}
+                                                        </button>
+                                                    `)}
+                                                    <button
+                                                        onClick=${() => setShowHistory(!showHistory)}
+                                                        className="p-2 w-2/5 bg-[#008c95] text-white rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                                    >
+                                                        ${showHistory ? 'hide history' : 'history'}
+                                                    </button>
+                                                </div>
+                                                ${showHistory && html`
+                                                    <div className="mt-2">
+                                                        <h4 className="text-sm font-bold">Geschiedenis</h4>
+                                                        <ul className="text-sm max-h-20 overflow-y-auto">
+                                                            ${history.map((item, index) => html`
+                                                                <li key=${index}>
+                                                                    ${item.expression} = ${item.result} ${item.unit}
+                                                                </li>
+                                                            `)}
+                                                        </ul>
+                                                    </div>
+                                                `}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                        <div className="flex-1 flex flex-col p-4 overflow-hidden">
+                            <div className="flex-1 flex gap-4 overflow-hidden h-[calc(100vh-2rem)]">
+                                <div className="w-2/5 bg-white p-4 rounded shadow overflow-y-auto animate-fade-in">
+                                    <div className="space-y-2">
+                                        ${Object.entries(filteredCategories).map(([cat, products]) => html`
+                                            <${CollapsibleCategory}
+                                                key=${cat}
+                                                catName=${cat}
+                                                products=${products}
+                                                onProductClick=${openQuantityPopup}
+                                            />
+                                        `)}
+                                    </div>
+                                </div>
+                                <div className=${ `${previewWidth} bg-white p-4 rounded shadow flex flex-col overflow-hidden animate-fade-in` }>
+                                    <div className="flex justify-between items-center mb-2">
+                                        <div>
+                                            <h2 className="text-lg font-bold text-[#008c95]">Offerte Preview</h2>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <img src="https://www.bright-inside.nl/wp-content/uploads/2022/05/Bright-Inside-logo.png" 
+                                                 alt="Bright Inside Logo" 
+                                                 className="h-8 mr-3"
+                                            />
+                                            <button
+                                                onClick=${() => {
+                                                    const table = document.querySelector('.table-container');
+                                                    table.classList.toggle('simplified-view');
+                                                }}
+                                                className="bg-[#008c95] text-white p-2 rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                            >
+                                                Versimpel overzicht
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto bg-gray-100 table-container">
+                                        <table className="w-full text-sm">
+                                            <thead className="bg-[#008c95] text-white sticky top-0">
+                                                <tr>
+                                                    <th className="p-2 w-20 col-code">Code</th>            
+                                                    <th className="p-2 w-32 col-categorie">Categorie</th>     
+                                                    <th className="p-2 w-80">Product</th>       
+                                                    <th className="p-2 w-16">Aantal</th>         
+                                                    <th className="p-2 w-28">€/st (excl.)</th>   
+                                                    <th className="p-2 w-28">Totaal (incl.)</th> 
+                                                    <th className="p-2 w-16 col-btw">Btw</th>   
+                                                    <th className="p-2 w-28">Acties</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                        <div className="overflow-y-auto">
+                                            <table className="w-full text-sm">
+                                                <tbody>
+                                                    ${quoteItems.map((item, index) => html`
+                                                        <tr key=${index} className="border-b hover:bg-[#f2c75c] hover:text-black">
+                                                            <td className="p-2 truncate max-w-[4rem]" title=${item.item_code}>${item.item_code}</td>
+                                                            <td className="p-2 truncate max-w-[9rem]" title=${item.category}>${item.category}</td>
+                                                            <td className="p-2">
+                                                                ${item.isEditing ? html`
+                                                                    <input
+                                                                        type="text"
+                                                                        value=${item.product}
+                                                                        onChange=${(e) => editQuoteItem(index, 'product', e.target.value)}
+                                                                        className="w-full p-1 border rounded focus:outline-none focus:ring-2 focus:ring-[#f2c75c]"
+                                                                    />
+                                                                ` : html`
+                                                                    <span className="block truncate cursor-default" title=${item.product}>
+                                                                        ${item.product}
+                                                                    </span>
+                                                                `}
+                                                            </td>
+                                                            <td className="p-2 max-w-[6rem]">
+                                                                ${item.isEditing ? html`
+                                                                    <input
+                                                                        type="number"
+                                                                        value=${item.quantity}
+                                                                        onChange=${(e) => editQuoteItem(index, 'quantity', e.target.value)}
+                                                                        className="w-full p-1 border rounded focus:outline-none focus:ring-2 focus:ring-[#f2c75c]"
+                                                                        step="0.01"
+                                                                    />
+                                                                ` : html`
+                                                                    <span className="block truncate">${item.quantity}</span>
+                                                                `}
+                                                            </td>
+                                                            <td className="p-2 max-w-[6rem]">
+                                                                ${item.isEditing ? html`
+                                                                    <input
+                                                                        type="number"
+                                                                        value=${item.unit_price_excl}
+                                                                        onChange=${(e) => editQuoteItem(index, 'unit_price_excl', e.target.value)}
+                                                                        className="w-full p-1 border rounded focus:outline-none focus:ring-2 focus:ring-[#f2c75c]"
+                                                                        step="0.01"
+                                                                    />
+                                                                ` : html`
+                                                                    <span className="block truncate">${item.unit_price_excl}</span>
+                                                                `}
+                                                            </td>
+                                                            <td className="p-2 truncate max-w-[6rem]">${(item.total_price_excl * (1 + TAX_RATE)).toFixed(2)}</td>
+                                                            <td className="p-2 truncate max-w-[8rem]" title=${item.description}>${item.description}</td>
+                                                            <td className="p-2 flex space-x-2 max-w-[8rem]">
+                                                                <button
+                                                                    onClick=${() => toggleEdit(index)}
+                                                                    className=${ `text-[#008c95] hover:bg-[#f2c75c] hover:text-black ${item.isEditing ? 'bg-[#f2c75c]/20 rounded p-1' : ''}` }
+                                                                    title=${item.isEditing ? "Opslaan" : "Bewerken"}
+                                                                >
+                                                                    ${item.isEditing ? '💾' : '✏️'}
+                                                                </button>
+                                                                <button
+                                                                    onClick=${() => duplicateQuoteItem(index)}
+                                                                    className="text-[#008c95] hover:bg-[#f2c75c] hover:text-black"
+                                                                    title="Dupliceren"
+                                                                >
+                                                                    📋
+                                                                </button>
+                                                                <button
+                                                                    onClick=${() => removeQuoteItem(index)}
+                                                                    className="text-red-500 hover:bg-[#f2c75c] hover:text-black"
+                                                                    title="Verwijderen"
+                                                                >
+                                                                    🗑️
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    `)}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 bg-[#f2c75c]/10 rounded p-4">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <p className="text-lg"><strong>Totaal incl. BTW (21%):</strong> €${totalIncl.toFixed(2)}</p>
+                                        </div>
+                                        <div className="grid grid-cols-6 gap-2">
+                                            <button
+                                                onClick=${exportToCSV}
+                                                className="bg-[#008c95] text-white p-2 rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                            >
+                                                Export to CSV
+                                            </button>
+                                            <button
+                                                onClick=${addReiskosten}
+                                                className="bg-[#008c95] text-white p-2 rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                            >
+                                                Reiskosten €45
+                                            </button>
+                                            <button
+                                                onClick=${addKleinMateriaal}
+                                                className="bg-[#008c95] text-white p-2 rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                            >
+                                                Klein materiaal €25,95
+                                            </button>
+                                            <button
+                                                onClick=${copyToClipboard}
+                                                className="bg-[#008c95] text-white p-2 rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                            >
+                                                Kopieer alles
+                                            </button>
+                                            <button
+                                                onClick=${clearAll}
+                                                className="bg-red-500 text-white p-2 rounded hover:bg-red-600"
+                                            >
+                                                Leeg alles
+                                            </button>
+                                            <button
+                                                onClick=${() => {
+                                                    const table = document.querySelector('.table-container');
+                                                    table.classList.toggle('simplified-view');
+                                                }}
+                                                className="bg-[#008c95] text-white p-2 rounded hover:bg-[#f2c75c] hover:text-[#008c95]"
+                                            >
+                                                Versimpel overzicht
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        ${showQuantityPopup && html`
+                            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                                <button style=${{
+                                    position: 'fixed',
+                                    left: `${calculateButtonPosition(popupButtonRect).left}px`,
+                                    top: `${calculateButtonPosition(popupButtonRect).top}px`,
+                                    transform: calculateButtonPosition(popupButtonRect).transform,
+                                    zIndex: 1060,
+                                    backgroundColor: calculateButtonPosition(popupButtonRect).backgroundColor,
+                                    visibility: 'visible'
+                                }}
+                                className="bg-[#008c95] text-white px-3 py-1 rounded shadow-lg hover:bg-[#f2c75c] hover:text-[#008c95] transition-colors"
+                                onClick=${handleSkip}
+                                >
+                                    Voeg 1 toe ${popupButtonRect ? '' : '(Fallback)'}
+                                </button>
+                                <div className="bg-white p-4 rounded shadow-lg max-w-md w-full m-4">
+                                    <h3 className="text-lg font-bold mb-2">Hoeveelheid voor '${currentProduct}'</h3>
+                                    ${currentProduct && html`
+                                        <${QuantityPopup}
+                                            onClose=${closeQuantityPopup}
+                                            onConfirm=${addToQuote}            
+                                            unit=${getUnit(currentProduct)}
+                                            productName=${currentProduct}
+                                        />
+                                    `}
+                                </div>
+                            </div>
+                        `}
+                    </div>
+                `;
+            }
+
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            root.render(html`<${OfferteTool} />`);
+        }
+
+        document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+            if (link.href.includes('post-7.css?ver=1745157078')) {
+                link.parentNode.removeChild(link);
+            }
+        });
+    </script>    
+</body>
+</html>
